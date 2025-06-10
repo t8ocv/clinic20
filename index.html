@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>برنامج إدارة العيادة</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            direction: rtl;
+            background: linear-gradient(to bottom, #e0f7fa, #ffffff);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #00796b;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        input, button {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #00796b;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+            border: none;
+        }
+
+        button:hover {
+            background-color: #004d40;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #004d40;
+            color: white;
+        }
+
+        td button {
+            background-color: #e53935;
+            color: white;
+            padding: 5px 10px;
+            font-size: 14px;
+            border: none;
+            border-radius: 4px;
+        }
+
+        td button:hover {
+            background-color: #c62828;
+        }
+    </style>
+</head>
+<body>
+
+    <header>برنامج إدارة العيادة</header>
+
+    <div class="container">
+        <input type="text" id="name" placeholder="اسم المريض">
+        <input type="date" id="date">
+        <input type="time" id="time">
+        <input type="text" id="doctor" placeholder="اسم الطبيب">
+        <button onclick="addAppointment()">إضافة موعد</button>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>المعرف</th>
+                    <th>اسم المريض</th>
+                    <th>تاريخ الموعد</th>
+                    <th>وقت الموعد</th>
+                    <th>الطبيب</th>
+                    <th>إجراءات</th>
+                </tr>
+            </thead>
+            <tbody id="appointmentsTable">
+                <!-- ستظهر المواعيد هنا -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        let appointments = [];
+        let idCounter = 1;
+
+        function addAppointment() {
+            const name = document.getElementById("name").value;
+            const date = document.getElementById("date").value;
+            const time = document.getElementById("time").value;
+            const doctor = document.getElementById("doctor").value;
+
+            if (name && date && time && doctor) {
+                const appointment = {
+                    id: idCounter++,
+                    name,
+                    date,
+                    time,
+                    doctor
+                };
+                appointments.push(appointment);
+                renderAppointments();
+                clearInputs();
+            } else {
+                alert("يرجى ملء جميع الحقول");
+            }
+        }
+
+        function deleteAppointment(id) {
+            appointments = appointments.filter(app => app.id !== id);
+            renderAppointments();
+        }
+
+        function renderAppointments() {
+            const table = document.getElementById("appointmentsTable");
+            table.innerHTML = "";
+            appointments.forEach(app => {
+                const row = `
+                    <tr>
+                        <td>${app.id}</td>
+                        <td>${app.name}</td>
+                        <td>${app.date}</td>
+                        <td>${app.time}</td>
+                        <td>${app.doctor}</td>
+                        <td><button onclick="deleteAppointment(${app.id})">حذف</button></td>
+                    </tr>
+                `;
+                table.innerHTML += row;
+            });
+        }
+
+        function clearInputs() {
+            document.getElementById("name").value = "";
+            document.getElementById("date").value = "";
+            document.getElementById("time").value = "";
+            document.getElementById("doctor").value = "";
+        }
+    </script>
+</body>
+</html>
